@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>ログイン</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <!-- ヘッダー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">Blog Name</a>
+
+        <ul class="navbar-nav ml-auto">
+          <!-- 未ログイン時のメニュー -->
+          <!--
+               <li class="nav-item">
+               <a class="nav-link" href="login.html">ログイン</a>
+               </li>
+
+               <li class="nav-item">
+               <a class="btn btn-primary" href="signup.html">新規登録</a>
+               </li>
+             -->
+
+          <!-- ログイン時のメニュー -->
+          <li class="nav-item">
+            <a class="nav-link" href="post.html">投稿する</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              設定
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="index.html">ログアウト</a>
+              <a class="dropdown-item" href="deactivation.html">アカウントを削除する</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- コンテンツ -->
+    <div class="container">
+      <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="w-75">
+          <!-- 記事タイトル -->
+          <h1 class="display-4 mb-4">Gitのブランチがたまりすぎてて削除めんどい</h1>
+
+          <!-- 投稿者 -->
+          <div class="mb-5">
+            <p class="font-weight-bold mb-0">
+              Yuuho Tsuboi
+            </p>
+            <p class="text-secondary mb-0">
+              2019-01-21 17:09:23
+            </p>
+          </div>
+
+          <!-- 記事本文 -->
+          <div class="markdown">
+            <!-- Pandoc自動生成 -->
+            <h2 id="内容">内容</h2>
+            <ul>
+              <li>ブランチ削除がめんどくさいので、マージしたブランチを全部消したい</li>
+              <li>リモートで削除されたブランチがローカルでは残り続けてて補完うざい</li>
+              <li>ついでにgit関連のエイリアス晒す</li>
+              </ul>
+              <h2 id="マージ済みのローカルブランチを削除する">マージ済みのローカルブランチを削除する</h2>
+              <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">git</span> branch --merged master <span class="kw">|</span> <span class="fu">grep</span> -E <span class="st">&quot;fix\/|feature\/&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> -vE <span class="st">&quot;^\*&quot;</span> <span class="kw">|</span> <span class="fu">xargs</span> -I % git branch -d %</code></pre></div>
+              <h3 id="やってること">やってること</h3>
+              <ul>
+                <li><code>git branch --merged master</code> でマージしたブランチ出す</li>
+                <li><code>fix/</code> と <code>feature/</code> からはじまるブランチだけにする</li>
+                <li><code>*</code> から始まってる行は現在のブランチなので、削除しない</li>
+                <li>あたりをパイプして全部削除</li>
+                </ul>
+                <p>自分の開発では <code>fix/</code> か <code>feature</code> プレフィクス絶対に付けるのでこういう形に、参考元の記事では <code>master</code> と <code>develop</code> 以外を削除するようになってた。ここはお好
+                  みで。</p>
+                <p>参考: <a href="https://gist.github.com/miukoba/fc3c10a25c1c675c1e97">gitでマージ済みの(リモート|ローカル)ブランチを全て削除.md</a></p>
+                <h2 id="リモートで削除されたブランチをローカルでも消す">リモートで削除されたブランチをローカルでも消す</h2>
+                <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">git</span> remote prune origin</code></pre></div>
+                <p>すれば、よいのだが、毎回やるのめんどい。オプションでfetch時にpruneもやってくれるのがあるので、それ有効にする</p>
+                <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="fu">git</span> config --global fetch.prune true</code></pre></div>
+                <h2 id="ついでにgit関連のエイリアス晒す">ついでにGit関連のエイリアス晒す</h2>
+                <pre class="bash:.zshrc"><code>############
+# git
+############
+
+# cd-gitroot
+autoload -Uz cd-gitroot
+
+# git alias
+alias gaa=&#39;git add -A&#39;
+alias gst=&#39;git status&#39;
+alias gcm=&#39;git commit&#39;
+alias gc=&#39;git checkout&#39;
+alias gbr=&#39;git branch&#39;
+alias gpl=&#39;git pull&#39;
+alias gps=&#39;git push&#39;
+alias gpsf=&#39;git push --force-with-lease&#39;
+alias ggr=&#39;git grep&#39;
+alias cdg=&#39;cd-gitroot&#39;
+alias gclean=&#39;git branch --merged master | grep -E &quot;fix\/|feature\/&quot; | grep -vE &quot;^\*&quot; | xargs -I % git branch -d %&#39;</code></pre>
+<p><code>cd-gitroot</code> はzshのプラグインで、リポジトリルートに移動してくれる。 <code>cdg</code> でつかう。結構便利。gcleanは上のやつ。 <code>git push</code> の <code>--force-with-lease</code> は <code>--force</code> よりは安全だが、そもそも強制プッシュとかしないほうがよい。なんかどっかのOSSで誤ってmaster吹き飛ばしたみたいなのあった記憶が。後はみんながよく使う（？）系のコマンドのエイリアス。ログとか差
+分はすべて <code>tig</code> で確認。（tig便利。tig。）ただし、色はどうにかしてほしい。</p>
+<p>参考: <a href="https://qiita.com/wMETAw/items/5f47dcc7cf57af8e449f">git push -f をやめて --force-with-lease を使おう</a></p>
+            <!-- /Pandoc自動生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
